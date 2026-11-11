@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Workout Tracker</title>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --card-bg: #121212;
+            --accent-color: #30d158;
+            --text-main: #ffffff;
+            --text-sub: #8e8e93;
+            --border-color: #1c1c1e;
+        }
+
+        body {
+            margin: 0;
+            padding: calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 24px) 16px;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .header {
+            margin-bottom: 24px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 0 6px 0;
+            letter-spacing: -0.5px;
+        }
+
+        .progress-bar-bg {
+            background-color: #1c1c1e;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-bar-fill {
+            background-color: var(--accent-color);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: var(--accent-color);
+            font-weight: 600;
+            float: right;
+        }
+
+        .day-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .day-title {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .day-badge {
+            background-color: rgba(48, 209, 88, 0.15);
+            color: var(--accent-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .exercise-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 0;
+            border-bottom: 1px solid #1a1a1c;
+            cursor: pointer;
+        }
+
+        .exercise-item:last-child {
+            border-bottom: none;
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #3a3a3c;
+            margin-right: 14px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            margin-top: 2px;
+        }
+
+        .exercise-item.completed .checkbox {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .checkbox::after {
+            content: '';
+            width: 6px;
+            height: 10px;
+            border: solid #000;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            display: none;
+        }
+
+        .exercise-item.completed .checkbox::after {
+            display: block;
+        }
+
+        .exercise-details {
+            flex-grow: 1;
+        }
+
+        .exercise-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            transition: color 0.2s ease;
+        }
+
+        .exercise-item.completed .exercise-name {
+            color: var(--text-sub);
+            text-decoration: line-through;
+        }
+
+        .exercise-sets {
+            font-size: 14px;
+            color: var(--text-sub);
+        }
+
+        .reset-btn {
+            width: 100%;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: #ff453a;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 20px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .reset-btn:active {
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <span class="progress-text" id="progressText">0/15 completed</span>
+        <h1>Weekly Workout</h1>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+    </div>
+
+    <!-- MONDAY -->
+    <div class="day-card">
+        <div class="day-header">
+            <div class="day-title">Monday – Legs, back & conditioning</div>
+            <div class="day-badge">Day 1</div>
+        </div>
+        
+        <div class="exercise-item" onclick="toggleExercise(this)">
+            <div class="checkbox"></div>
+            <div class="exercise-details">
+                <div class="exercise-name">Romanian deadlifts</div>
+                <div class="exercise-sets">3 × 8–10</div>
+            </div>
+        </div>
+        
+        <div class="exercise-item" onclick="toggleExercise(this)">
+            <div class="checkbox"></div>
+            <div class="exercise-details">
+                <div class="exercise-name">Lat pulldowns</div>
+                <div class="exercise-sets">3 × 8–12</div>
+            </div>
+        </div>
+        
+        <div class="exercise-item" onclick="toggleExercise(this)">
+            <div class="checkbox"></div>
+            <div class="exercise-details">
+                <div class="exercise-name">Leg press</div>
+                <div class="exercise-sets">3 × 10–12</div>
+            </div>
+        </div>
+        
+        <div class="exercise-item" onclick="toggleExercise(this)">
+            <div class="checkbox"></div>
+            <div class="exercise-details">
+                <div class="exercise-name">Dumbbell walking lunges</div>
+                <div class="exercise-sets">2 × 10 each leg</div>
+            </div>
+        </div>
+        
+        <div class="exercise-item" onclick="toggleExercise(this)">
+            <div class="checkbox"></div>
+            <div class="exercise-details">
+                <div class="exercise-name">Stationary bike or treadmill</div>
+                <div class="exercise-sets">10–12 minutes</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WEDNESDAY -->
+    <div class="day-card">
+        <div class="day-header">
+            <div class="day-title">Wednesday – Full-body strength</div>
+            <div class="day-badge">Day 2</div>
+        </div>
+        
+        <div class="exercise-item" onclick="toggleExercise(this)">
+            <div class="checkbox"></div>
+            <div class="exercise-details">
+                <div class="exercise-name">Barbell bench press</div>
+                <div class="exercise-sets">4 × 5–6</div>
+            </div>
+        </div>
+        
+        <div class="exercise-item" onclick="toggleExercise(this)">
+            <div class="checkbox"></div>
+            <div class="exercise-details">
+                <div class="exercise-name">Barbell squats</div>
+                <div class="exercise-sets">3 × 6–8</div>
+            </div>
+        </div>
+        
+        <div class="exercise-item" onclick="toggleExercise(this)">
+            <div class="checkbox"></div>
+            <div class="exercise-details">
+                <div class="exercise-name">Seated cable rows</div>
+                <div class="exercise-sets">3 × 8–10</div>
+            </div>
+        </div>
+        
+        <div class="exercise-item" onclick="toggleExercise(this)">
+            <div class="checkbox"></div>
+            <div class="exercise-details">
+                <div class
